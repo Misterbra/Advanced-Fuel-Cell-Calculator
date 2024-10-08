@@ -7,13 +7,20 @@ import {
   calculateLosses, 
   calculateNernstVoltage,
   FuelCellType,
-  CalculationResults
+  CalculationResults,
+  FuelCellInputs
 } from '../utils/fuelCellCalculations';
 import { calculatePEMSpecifics, PEMInputs, PEMResults } from '../utils/pemCalculations';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 
+type ChartDataPoint = {
+  voltage: number;
+  current: number;
+  power: number;
+};
+
 const FuelCellCalculator: React.FC = () => {
-  const [inputs, setInputs] = useState({
+  const [inputs, setInputs] = useState<FuelCellInputs>({
     voltage: 0.7,
     current: 10,
     activeArea: 100,
@@ -46,18 +53,18 @@ const FuelCellCalculator: React.FC = () => {
     anodeEndPlateThickness: 10,
     cathodeEndPlateThickness: 10,
   });
-
+  
   const [results, setResults] = useState<CalculationResults | null>(null);
   const [pemResults, setPemResults] = useState<PEMResults | null>(null);
-  const [chartData, setChartData] = useState<any[]>([]);
-
+  const [chartData, setChartData] = useState<ChartDataPoint[]>([]);
+  
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setInputs(prev => ({ ...prev, [name]: parseFloat(value) }));
   };
 
   const handleCompositionChange = (gas: 'anode' | 'cathode', component: string, value: number) => {
-    setInputs(prev => ({
+    setInputs((prev) => ({
       ...prev,
       [`${gas}Composition`]: { ...prev[`${gas}Composition`], [component]: value }
     }));
@@ -97,8 +104,8 @@ const FuelCellCalculator: React.FC = () => {
     setChartData(generateChartData(inputs, newResults));
   };
 
-  const generateChartData = (inputs: any, results: CalculationResults) => {
-    const data = [];
+  const generateChartData = (inputs: FuelCellInputs, results: CalculationResults): ChartDataPoint[] => {
+    const data: ChartDataPoint[] = [];
     for (let i = 0; i <= 1; i += 0.1) {
       const voltage = i * results.nernstVoltage;
       const current = (results.nernstVoltage - voltage) / (results.activationLoss + results.ohmicLoss);

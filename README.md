@@ -84,8 +84,3 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## Contact
 
 For questions or feedback, please contact the project maintainer at kenkan.vl@gmail.com.
-
-## Acknowledgments
-
-- Thanks to all contributors who have helped shape this project.
-- Special thanks to the fuel cell research community for their invaluable insights.

@@ -1,6 +1,6 @@
 export type FuelCellType = 'PEM' | 'SOFC' | 'AFC' | 'MCFC' | 'PAFC';
 
-interface FuelCellInputs {
+export interface FuelCellInputs {
   voltage: number;
   current: number;
   activeArea: number;
